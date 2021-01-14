@@ -12,6 +12,12 @@
       executable: /bin/bash
     become: yes
 
+  - name: Install container-selinux 
+    shell: "dnf -y copr enable rhcontainerbot/container-selinux"
+    args:
+      executable: /bin/bash
+    become: yes
+
   - name: Install podman repo
     shell: "curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo"
     args:
