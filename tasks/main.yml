@@ -1,0 +1,25 @@
+---
+
+  - name: Disable container-tools module
+    shell: "dnf -y module disable container-tools"
+    args:
+      executable: /bin/bash
+    become: yes
+
+  - name: Install dnf copr plugin
+    shell: "dnf install -y 'dnf-command(copr)'"
+    args:
+      executable: /bin/bash
+    become: yes
+
+  - name: Install podman repo
+    shell: "curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo"
+    args:
+      executable: /bin/bash
+    become: yes
+
+  - name: Install podman
+    dnf:
+      name: podman
+      state: latest
+    become: yes
