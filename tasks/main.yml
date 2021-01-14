@@ -1,9 +1,20 @@
 ---
+  - name: check if podman is installed
+    shell: "dnf list installed podman"
+    become: yes
+    register: podman_installed
+    tags: test
+  
+  - name: debug
+    debug:
+      var: podman_installed.stdout
+    tags: test
 
   - name: Disable container-tools module
     shell: "dnf -y module disable container-tools"
     args:
       executable: /bin/bash
+      warn: false
     become: yes
 
   - name: Install dnf copr plugin
@@ -19,9 +30,9 @@
     become: yes
 
   - name: Install podman repo
-    shell: "curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo"
-    args:
-      executable: /bin/bash
+    get_url:
+      url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo"
+      dest: /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo
     become: yes
 
   - name: Install podman
@@ -29,3 +40,4 @@
       name: podman
       state: latest
     become: yes
+  
